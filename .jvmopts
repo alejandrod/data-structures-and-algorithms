@@ -1,0 +1,4 @@
+-Duser.timezone=UTC
+-Xms1024M
+-Xmx1024M
+-Dsbt.supershell=false
