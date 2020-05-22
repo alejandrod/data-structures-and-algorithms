@@ -25,7 +25,7 @@ class Graph[T] {
 
   def showConnections: String = {
     val lines = adjacentList.map {
-      case (node: T, edges: ListBuffer[T]) => s"$node --> ${edges.mkString(" ")}"
+      case (node, edges: ListBuffer[T]) => s"$node --> ${edges.mkString(" ")}"
     }
     lines.mkString("\n")
   }

@@ -31,7 +31,7 @@ class BinarySearchTree[T <: Comparable[T]] {
     if (root.isEmpty) {
       None
     } else {
-      doRemove(e, root.get, None, isRight = false)
+      doRemove(e, root.get, None)
     }
   }
 
@@ -97,17 +97,17 @@ class BinarySearchTree[T <: Comparable[T]] {
   }
 
   @tailrec
-  private def doRemove(e: T, current: Node, parent: Option[Node], isRight: Boolean): Option[Node] = {
+  private def doRemove(e: T, current: Node, parent: Option[Node]): Option[Node] = {
     val comparison = e.compareTo(current.value)
     if (comparison > 0) {
       if (current.right.isDefined) {
-        doRemove(e, current.right.get, Some(current), isRight = true)
+        doRemove(e, current.right.get, Some(current))
       } else {
         None
       }
     } else if (comparison < 0) {
       if (current.left.isDefined) {
-        doRemove(e, current.left.get, Some(current), isRight = false)
+        doRemove(e, current.left.get, Some(current))
       } else {
         None
       }

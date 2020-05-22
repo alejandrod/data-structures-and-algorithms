@@ -48,8 +48,8 @@ object BubbleSortApp extends App {
   sort(three)
   assert(three sameElements Array(0, 4, 8))
 
-  val multiple = Array[Integer](8, 4, 0, 1, 2, 10, 7)
+  val multiple = Array[Integer](8, 4, 0, 1, 2, 10, 7, 7)
   sort(multiple)
-  assert(multiple sameElements Array(0, 1, 2, 4, 7, 8, 10))
+  assert(multiple sameElements Array(0, 1, 2, 4, 7, 7, 8, 10))
 
 }
