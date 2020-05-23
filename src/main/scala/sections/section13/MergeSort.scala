@@ -4,18 +4,18 @@ object MergeSort {
 
   // Since we split and merge arrays, making it in place will require more complicated logic.
   // Version 1 using recursion
-  def sort[T <: Comparable[T]](array: Array[T])(implicit ord: Ordering[T]): Unit = {
+  def sort(array: Array[Int]): Unit = {
     val sorted = functionalSort(array.toList)
     sorted.zipWithIndex.foreach {
       case (v, i) => array(i) = v
     }
   }
 
-  def sortInplace[T <: Comparable[T]](array: Array[T])(implicit ord: Ordering[T]): Unit = {
+  def sortInplace(array: Array[Int]): Unit = {
     inplaceSort(array, 0, array.length - 1)
   }
 
-  private def functionalSort[T <: Comparable[T]](seq: List[T])(implicit ord: Ordering[T]): List[T] = {
+  private def functionalSort(seq: List[Int]): List[Int] = {
     val length = seq.length
     if (length > 1) {
       val middle = length / 2
@@ -26,12 +26,12 @@ object MergeSort {
     }
   }
 
-  private def functionalMerge[T <: Comparable[T]](a: List[T], b: List[T])(implicit ord: Ordering[T]): List[T] = {
+  private def functionalMerge(a: List[Int], b: List[Int]): List[Int] = {
     (a, b) match {
       case (v, Nil) => v
       case (Nil, v) => v
       case (x :: xs, y :: ys) =>
-        if (ord.lt(x, y)) {
+        if (x < y) {
           x +: functionalMerge(xs, b)
         } else {
           y +: functionalMerge(a, ys)
@@ -42,7 +42,7 @@ object MergeSort {
   }
 
 
-  private def inplaceSort[T <: Comparable[T]](array: Array[T], from: Int, to: Int)(implicit ord: Ordering[T]): Unit = {
+  private def inplaceSort(array: Array[Int], from: Int, to: Int): Unit = {
     val length = to - from + 1
     if (length > 1) {
       // Same as (to + from) / 2, but avoids overflow for large from and to
@@ -53,15 +53,15 @@ object MergeSort {
     }
   }
 
-  private def inplaceMerge[T <: Comparable[T]](array: Array[T], from: Int, to: Int, middle: Int)(implicit ord: Ordering[T]): Unit = {
+  private def inplaceMerge(array: Array[Int], from: Int, to: Int, middle: Int): Unit = {
     var left = from
     var mid = middle
     var right = middle + 1
 
-    if (ord.gt(array(mid), array(right))) {
-      while (left <= mid && right <= to) {
+    if (array(mid) >= array(right)) { // Is it already sorted?
 
-        if (ord.lteq(array(left), array(right))) {
+      while (left <= mid && right <= to) {
+        if (array(left) <= array(right)) {
           left += 1
         } else {
           val value = array(right)
@@ -87,8 +87,8 @@ object MergeSort {
 
 object MergeSortApp extends App with SortTesting {
 
-  //  testInplace(MergeSort.sort[Integer])
+  testInplace(MergeSort.sort)
 
-  testInplace(MergeSort.sortInplace[Integer])
+  testInplace(MergeSort.sortInplace)
 
 }
