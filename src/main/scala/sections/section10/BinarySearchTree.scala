@@ -2,43 +2,49 @@ package sections.section10
 
 import scala.annotation.tailrec
 
+case class BinaryTreeNode[T](var value: T, var left: Option[BinaryTreeNode[T]] = None, var right: Option[BinaryTreeNode[T]] = None) {
+
+  override def toString: String = value.toString
+
+  def children: List[BinaryTreeNode[T]] = left.toList ::: right.toList
+}
+
 class BinarySearchTree[T <: Comparable[T]] {
+  type Node = BinaryTreeNode[T]
 
-  case class Node(var value: T, var left: Option[Node] = None, var right: Option[Node] = None) {
-    override def toString: String = value.toString
-  }
+  private var _root: Option[Node] = None
 
-  private var root: Option[Node] = None
+  def root: Option[Node] = _root
 
   def insert(e: T): Node = {
-    if (root.isEmpty) {
-      root = Some(Node(e))
-      root.get
+    if (_root.isEmpty) {
+      _root = Some(BinaryTreeNode(e))
+      _root.get
     } else {
-      doInsert(e, root.get)
+      doInsert(e, _root.get)
     }
   }
 
   def lookup(e: T): Option[Node] = {
-    if (root.isEmpty) {
+    if (_root.isEmpty) {
       None
     } else {
-      doLookup(e, root.get)
+      doLookup(e, _root.get)
     }
   }
 
   def remove(e: T): Option[Node] = {
-    if (root.isEmpty) {
+    if (_root.isEmpty) {
       None
     } else {
-      doRemove(e, root.get, None)
+      doRemove(e, _root.get, None)
     }
   }
 
 
   override def toString: String = {
     val levels = LazyList.range(1, Int.MaxValue).map(level => {
-      nodesForLevel(root, level)
+      nodesForLevel(_root, level)
     }).takeWhile(_.nonEmpty)
 
     levels.map(nodes => nodes.mkString(" - ")).mkString("\n")
@@ -59,7 +65,7 @@ class BinarySearchTree[T <: Comparable[T]] {
   private def doInsert(e: T, current: Node): Node = {
     if (e.compareTo(current.value) >= 0) {
       if (current.right.isEmpty) {
-        val node = Node(e)
+        val node = BinaryTreeNode(e)
         current.right = Some(node)
         node
       } else {
@@ -67,7 +73,7 @@ class BinarySearchTree[T <: Comparable[T]] {
       }
     } else {
       if (current.left.isEmpty) {
-        val node = Node(e)
+        val node = BinaryTreeNode(e)
         current.left = Some(node)
         node
       } else {
@@ -117,7 +123,7 @@ class BinarySearchTree[T <: Comparable[T]] {
       //Option 1: No right child:
       if (current.right.isEmpty) {
         if (parent.isEmpty) {
-          root = current.left
+          _root = current.left
         } else {
           val c = current.value.compareTo(parent.get.value)
           if (c < 0) {
@@ -132,7 +138,7 @@ class BinarySearchTree[T <: Comparable[T]] {
         current.right.get.left = current.left
 
         if (parent.isEmpty) {
-          root = current.right
+          _root = current.right
         } else {
           val c = current.value.compareTo(parent.get.value)
           if (c < 0) {
@@ -159,7 +165,7 @@ class BinarySearchTree[T <: Comparable[T]] {
         leftmost.right = current.right
 
         if (parent.isEmpty) {
-          this.root = Some(leftmost)
+          this._root = Some(leftmost)
         } else {
           val c = current.value.compareTo(parent.get.value)
           if (c < 0) {
