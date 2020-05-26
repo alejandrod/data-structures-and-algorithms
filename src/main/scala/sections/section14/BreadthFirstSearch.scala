@@ -37,6 +37,7 @@ object BreadthFirstSearch {
 }
 
 object BreadthFirstSearchApp extends App {
+
   import BreadthFirstSearch._
 
   val tree = new BinarySearchTree[Integer]()
